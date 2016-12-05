@@ -2,11 +2,11 @@ package ProducerConsumerProblem;
 
 import java.util.List;
 
-public class Producer implements Runnable {
+public class Consumer implements Runnable {
 
 	private List<Integer> resource;
 
-	public Producer(List<Integer> arryList) {
+	public Consumer(List<Integer> arryList) {
 		this.resource = arryList;
 	}
 
@@ -15,20 +15,21 @@ public class Producer implements Runnable {
 		synchronized (resource) {
 
 			while (true) {
-				if (resource.size() < 10) {
-					System.out.println("Producer.run().add");
-					resource.add((int) Math.random());
-				} else {
+				if (resource.size() == 0) {
 					try {
-						System.out.println("Producer.run().wait");
+						System.out.println("Consumer.run().wait");
 						resource.wait();
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					resource.notify();
+				} else {
+					System.out.println("Consumer.run().remove()" + resource.size());
+					resource.remove(resource.size() - 1);
 				}
+				resource.notify();
 			}
 		}
+
 	}
 
 }
